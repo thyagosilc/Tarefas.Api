@@ -1,4 +1,7 @@
-﻿using Tarefas.Api.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using Tarefas.Api.Configuration;
+using Tarefas.Data.Context;
 
 namespace Tarefas.Api
 {
@@ -43,6 +46,14 @@ namespace Tarefas.Api
             app.UseApiConfig(env);
             app.UseSwaggerConfig();
             app.UseElmahIoExtensionsLogging();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider
+                    .GetRequiredService<DbContextApp>();
+
+                dbContext.Database.Migrate();
+            }
         }
     }
 

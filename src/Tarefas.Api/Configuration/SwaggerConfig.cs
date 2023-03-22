@@ -40,7 +40,7 @@ namespace Tarefas.Api.Configuration
             {
                 Title = "API - Tarefas",
                 Version = description.ApiVersion.ToString(),
-                Description = "Esta API REST de Tarefas",
+                Description = "API REST de Tarefas",
                 Contact = new OpenApiContact() { Name = "Thyago", Email = "contato@thyago.com" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
             };

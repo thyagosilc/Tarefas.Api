@@ -1,28 +1,36 @@
 ﻿using Tarefas.Business.Interfaces;
 using Tarefas.Business.Models;
 using Tarefas.Business.Models.Validation;
+using Tarefas.Business.RabitMQ;
 
 namespace Tarefas.Business.Services
 {
     public class TarefaService : BaseService, ITarefaService
     {
         private readonly ITarefaRepository _tarefaRepository;
+        private readonly IRabitMQConsumer _rabitMQConsumer;
 
-        public TarefaService(ITarefaRepository tarefaRepository, INotificador notificador) : base(notificador)
+        public TarefaService(ITarefaRepository tarefaRepository, INotificador notificador, IRabitMQConsumer rabitMQConsumer) : base(notificador)
         {
             _tarefaRepository = tarefaRepository;
+            _rabitMQConsumer = rabitMQConsumer;
         }
 
-        public async Task<bool> Adicionar(Tarefa tarefa)
+        public async Task<bool> Adicionar()
         {
+            var tarefa = await _rabitMQConsumer.GetMessageAdicionarTarefa();
+
             if (!ExecutarValidacao(new TarefaValidation(), tarefa)) return false;
 
             await _tarefaRepository.Adicionar(tarefa);
+
             return true;
         }
 
-        public async Task<bool> Atualizar(Tarefa tarefa)
+        public async Task<bool> Atualizar()
         {
+            var tarefa = await _rabitMQConsumer.GetMessageAtualizarTarefa();
+
             if (!ExecutarValidacao(new TarefaValidation(), tarefa)) return false;
 
             await _tarefaRepository.Atualizar(tarefa);
@@ -35,7 +43,7 @@ namespace Tarefas.Business.Services
             return true;
         }
 
-       public async Task<Tarefa> ObterTarefaPorId(Guid id)
+        public async Task<Tarefa> ObterTarefaPorId(Guid id)
         {
             return await _tarefaRepository.ObterTarefaPorId(id);
         }
@@ -44,7 +52,6 @@ namespace Tarefas.Business.Services
         {
             _tarefaRepository?.Dispose();
         }
-
 
     }
 }

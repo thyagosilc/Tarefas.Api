@@ -10,6 +10,24 @@ services:
         - "8080:80"
     depends_on:
         - db
+  worker:
+    build: src/Tarefas.Api
+    restart: always
+    depends_on:
+      - "tarefas.api"
+      - "rabbitmq"
+  rabbitmq: 
+    image: rabbitmq:3-management
+    hostname: "localhost"
+    labels:
+      NAME: "localhost"
+    ports:
+    - "4369:4369"
+    - "5671:5671"
+    - "5672:5672"
+    - "25672:25672"
+    - "15671:15671"
+    - "15672:15672"
 
   db:
      image: "mcr.microsoft.com/mssql/server:2022-latest"

@@ -1,8 +1,10 @@
 ﻿using Elmah.Io.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Tarefas.Api.RabitMQ;
 using Tarefas.Business.Interfaces;
 using Tarefas.Business.Notificacoes;
+using Tarefas.Business.RabitMQ;
 using Tarefas.Business.Services;
 using Tarefas.Data.Context;
 using Tarefas.Data.Repository;
@@ -20,6 +22,8 @@ namespace Tarefas.Api.Configuration
             services.AddTransient<ITarefaService, TarefaService>();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
+            services.AddScoped<IRabitMQProducer, RabitMQProducer>();
+            services.AddScoped<IRabitMQConsumer, RabitMQConsumer>();
 
             services.AddLogging(provider =>
             {

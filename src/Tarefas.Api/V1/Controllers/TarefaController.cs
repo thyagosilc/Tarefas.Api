@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Tarefas.Api.Controllers;
+using Tarefas.Api.RabitMQ;
 using Tarefas.Api.ViewModels;
 using Tarefas.Business.Interfaces;
 using Tarefas.Business.Models;
@@ -14,6 +15,7 @@ namespace Tarefas.Api.V1.Controllers
         private readonly ITarefaRepository _tarefaRepository;
         private readonly IMapper _mapper;
         private readonly ITarefaService _tarefaService;
+        private readonly IRabitMQProducer _rabitMQProducer;
 
         private readonly ILogger<TarefaController> _logger;
 
@@ -22,13 +24,15 @@ namespace Tarefas.Api.V1.Controllers
             IMapper mapper,
             ITarefaRepository tarefaRepository,
             ITarefaService tarefaService,
-            ILogger<TarefaController> logger) : base(notificador)
+            ILogger<TarefaController> logger,
+            IRabitMQProducer rabitMQProducer) : base(notificador)
         {
 
             _mapper = mapper;
             _tarefaRepository = tarefaRepository;
             _tarefaService = tarefaService;
             this._logger = logger;
+            _rabitMQProducer = rabitMQProducer;
         }
 
         [HttpGet]
@@ -58,8 +62,13 @@ namespace Tarefas.Api.V1.Controllers
             _logger.LogTrace("Chamando o endpoint Adicionar");
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
+            _logger.LogTrace("Adicionado a mensagem na fila");
+
+            _rabitMQProducer.AdicionaTarefaMessage(_mapper.Map<Tarefa>(tarefaViewModel));
+
             _logger.LogTrace("chamando o serviço para adicionar uma nova tarefa");
-            await _tarefaService.Adicionar(_mapper.Map<Tarefa>(tarefaViewModel));
+            await _tarefaService.Adicionar();
+
 
             _logger.LogTrace("Finalizando chamada do endpoint Adicionar");
             return CustomResponse(tarefaViewModel);
@@ -79,7 +88,11 @@ namespace Tarefas.Api.V1.Controllers
             _logger.LogTrace("chamando o serviço para atualizar a tarefa");
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            await _tarefaService.Atualizar(_mapper.Map<Tarefa>(fornecedorViewModel));
+
+            _logger.LogTrace("Adicionado a mensagem na fila");
+            _rabitMQProducer.AtualizaTarefaMessage(_mapper.Map<Tarefa>(fornecedorViewModel));
+
+            await _tarefaService.Atualizar();
 
             _logger.LogTrace("Finalizando chamada do endpoint Atualizar");
             return CustomResponse(fornecedorViewModel);

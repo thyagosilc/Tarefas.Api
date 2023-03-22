@@ -18,9 +18,9 @@ services:
       - "rabbitmq"
   rabbitmq: 
     image: rabbitmq:3-management
-    hostname: "localhost"
+    hostname: "rabbitmq"
     labels:
-      NAME: "localhost"
+      NAME: "rabbitmq"
     ports:
     - "4369:4369"
     - "5671:5671"

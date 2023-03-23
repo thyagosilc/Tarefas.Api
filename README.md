@@ -9,12 +9,16 @@ Selecionar o ambiente de execução: (IIS-DEV) ou (Tarefas.Api)
 
 2 PASSO: 
  Verificar se o appsettings.json está apontando para localdb 
+![image](https://user-images.githubusercontent.com/9157652/227243855-1774f28b-97f8-4e7b-bdc5-fd62ec6e5569.png)
+
 
 3 PASSO: 
 Criar o conteiner docker para o rabbitmq. 
+![image](https://user-images.githubusercontent.com/9157652/227244365-447ce055-1b7a-4a71-aa9e-9933d1ecd5f7.png)
+
 Executar o comando no cmd:  docker run --rm -it -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+![image](https://user-images.githubusercontent.com/9157652/227245143-e72c00c8-521c-4aee-8b58-0f71e1bac349.png)
+
+http://localhost:15672/
 
  
-Execução da API em localhost.
-Criar o conteiner docker para execução local: docker run --rm -it -p 15672:15672 -p 5672:5672 rabbitmq:3-management
-Caso necessario: Alterar url da API no app= TararefaAppAngula: arquivo Tarefas.Service.ts

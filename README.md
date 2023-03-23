@@ -30,8 +30,8 @@ http://localhost:15672/
 
 
 4 PASSO:
-
 Start no projeto
+
 ![image](https://user-images.githubusercontent.com/9157652/227245963-df7a8481-10d5-4727-8046-af24700729ed.png)
 
 

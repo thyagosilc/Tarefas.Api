@@ -1,5 +1,4 @@
 # Tarefas.Api
-Aplicação REST usando .NET core 6
 Como rodar o projeto local.
 
 

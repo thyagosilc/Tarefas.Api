@@ -27,7 +27,8 @@ Executar esse comando no cmd:   docker run --rm -it -p 15672:15672 -p 5672:5672 
 ![image](https://user-images.githubusercontent.com/9157652/227245143-e72c00c8-521c-4aee-8b58-0f71e1bac349.png)
 
 http://localhost:15672/
-Usuário default: guest Senha default: guest 
+
+Usuário: guest Senha: guest 
 
 4 PASSO:
 Start no projeto
